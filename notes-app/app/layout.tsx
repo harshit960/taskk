@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
+import { Header } from "@/components/layout/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,20 +32,7 @@ export default function RootLayout({
       >
         <Providers>
           <div className="flex min-h-screen flex-col">
-            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <div className="container flex h-14 items-center">
-                <div className="mr-4 flex">
-                  <a href="/" className="mr-6 flex items-center space-x-2">
-                    <span className="font-bold">Notes App</span>
-                  </a>
-                  <nav className="flex items-center space-x-6 text-sm font-medium">
-                    <a href="/notes" className="transition-colors hover:text-foreground/80">
-                      Notes
-                    </a>
-                  </nav>
-                </div>
-              </div>
-            </header>
+            <Header />
             <main className="flex-1 container py-6">
               {children}
             </main>
