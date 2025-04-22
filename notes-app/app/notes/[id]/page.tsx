@@ -2,18 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import { NoteForm } from "@/components/notes/note-form";
-import { useNotes } from "@/lib/contexts/notes-context";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useNote, useUpdateNote, useDeleteNote } from "@/lib/services/notes-service";
 
 export default function NotePage({ params }: { params: { id: string } }) {
-  const { getNoteById, updateNote, deleteNote } = useNotes();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   
-  const note = getNoteById(params.id);
+  const { data: note, isLoading } = useNote(params.id);
+  const updateNoteMutation = useUpdateNote();
+  const deleteNoteMutation = useDeleteNote();
+  
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <p className="text-lg text-muted-foreground">Loading note...</p>
+      </div>
+    );
+  }
   
   if (!note) {
     return (
@@ -30,15 +39,30 @@ export default function NotePage({ params }: { params: { id: string } }) {
   }
   
   const handleUpdateNote = (data: { title: string; content: string; tags?: string[] }) => {
-    updateNote(note.id, data);
-    setIsEditing(false);
-    toast.success("Note updated successfully!");
+    updateNoteMutation.mutate(
+      { id: note.id, data },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+          toast.success("Note updated successfully!");
+        },
+        onError: (error) => {
+          toast.error(`Failed to update note: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    );
   };
   
   const handleDeleteNote = () => {
-    deleteNote(note.id);
-    toast.success("Note deleted successfully!");
-    router.push("/notes");
+    deleteNoteMutation.mutate(note.id, {
+      onSuccess: () => {
+        toast.success("Note deleted successfully!");
+        router.push("/notes");
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete note: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    });
   };
   
   const formattedDate = new Date(note.updatedAt).toLocaleDateString("en-US", {
@@ -58,10 +82,18 @@ export default function NotePage({ params }: { params: { id: string } }) {
         <div className="flex gap-2">
           {!isEditing && (
             <>
-              <Button variant="outline" onClick={() => setIsEditing(true)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsEditing(true)}
+                disabled={updateNoteMutation.isPending}
+              >
                 Edit
               </Button>
-              <Button variant="destructive" onClick={handleDeleteNote}>
+              <Button 
+                variant="destructive" 
+                onClick={handleDeleteNote}
+                disabled={deleteNoteMutation.isPending}
+              >
                 Delete
               </Button>
             </>

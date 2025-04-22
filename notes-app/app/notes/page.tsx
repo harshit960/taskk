@@ -2,24 +2,38 @@
 
 import { Button } from "@/components/ui/button";
 import { NotesList } from "@/components/notes/notes-list";
-import { useNotes } from "@/lib/contexts/notes-context";
 import { useState } from "react";
 import { NoteForm } from "@/components/notes/note-form";
 import { toast } from "sonner";
+import { useNotes, useAddNote, useDeleteNote } from "@/lib/services/notes-service";
 
 export default function NotesPage() {
-  const { notes, addNote, deleteNote } = useNotes();
+  const { data: notes = [] } = useNotes();
+  const addNoteMutation = useAddNote();
+  const deleteNoteMutation = useDeleteNote();
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateNote = (data: { title: string; content: string; tags?: string[] }) => {
-    addNote(data);
-    setIsCreating(false);
-    toast.success("Note created successfully!");
+    addNoteMutation.mutate(data, {
+      onSuccess: () => {
+        setIsCreating(false);
+        toast.success("Note created successfully!");
+      },
+      onError: (error) => {
+        toast.error(`Failed to create note: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    });
   };
 
   const handleDeleteNote = (id: string) => {
-    deleteNote(id);
-    toast.success("Note deleted successfully!");
+    deleteNoteMutation.mutate(id, {
+      onSuccess: () => {
+        toast.success("Note deleted successfully!");
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete note: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    });
   };
 
   return (
@@ -40,7 +54,11 @@ export default function NotesPage() {
           />
         </div>
       ) : (
-        <NotesList notes={notes} onDelete={handleDeleteNote} />
+        <NotesList 
+          notes={notes} 
+          onDelete={handleDeleteNote} 
+          isLoading={addNoteMutation.isPending || deleteNoteMutation.isPending}
+        />
       )}
     </div>
   );

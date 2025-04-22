@@ -4,9 +4,20 @@ import { NoteCard } from "./note-card";
 interface NotesListProps {
   notes: Note[];
   onDelete?: (id: string) => void;
+  isLoading?: boolean;
 }
 
-export function NotesList({ notes, onDelete }: NotesListProps) {
+export function NotesList({ notes, onDelete, isLoading = false }: NotesListProps) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        <p className="text-lg text-muted-foreground mb-4">
+          Loading notes...
+        </p>
+      </div>
+    );
+  }
+
   if (notes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center">
