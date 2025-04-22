@@ -32,7 +32,7 @@ export async function GET(
       content: note.content,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
-      tags: note.tags.map((noteTag) => noteTag.tag.name),
+      tags: note.tags.map((noteTag: { tag: { name: any; }; }) => noteTag.tag.name),
     };
 
     return NextResponse.json(transformedNote);
@@ -74,7 +74,7 @@ export async function PUT(
     }
 
     // Update the note with transactions
-    const updatedNote = await prisma.$transaction(async (tx) => {
+    const updatedNote = await prisma.$transaction(async (tx: { note: { update: (arg0: { where: { id: string; }; data: { title: any; content: any; }; }) => any; findUnique: (arg0: { where: { id: any; }; include: { tags: { include: { tag: boolean; }; }; }; }) => any; }; noteTag: { deleteMany: (arg0: { where: { noteId: string; }; }) => any; create: (arg0: { data: { noteId: any; tagId: any; }; }) => any; }; tag: { upsert: (arg0: { where: { name: any; }; update: {}; create: { name: any; }; }) => any; }; }) => {
       // Update the note
       const note = await tx.note.update({
         where: { id: params.id },
@@ -138,7 +138,7 @@ export async function PUT(
       content: updatedNote.content,
       createdAt: updatedNote.createdAt,
       updatedAt: updatedNote.updatedAt,
-      tags: updatedNote.tags.map((noteTag) => noteTag.tag.name),
+      tags: updatedNote.tags.map((noteTag: { tag: { name: any; }; }) => noteTag.tag.name),
     };
 
     return NextResponse.json(transformedNote);

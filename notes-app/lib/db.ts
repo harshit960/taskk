@@ -1,5 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-
+// import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from './generated/prisma/client'
+// const prisma = new PrismaClient()
+// use `prisma` in your application to read and write data in your DB
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
 // Learn more: https://pris.ly/d/help/next-js-best-practices

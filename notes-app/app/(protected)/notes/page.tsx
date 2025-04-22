@@ -5,7 +5,7 @@ import { NotesList } from "@/components/notes/notes-list";
 import { useState } from "react";
 import { NoteForm } from "@/components/notes/note-form";
 import { toast } from "sonner";
-import { useNotes, useAddNote, useDeleteNote } from "@/lib/services/notes-service";
+import { useNotes, useAddNote, useDeleteNote } from "@/lib/services/api-notes-service";
 
 export default function NotesPage() {
   const { data: notes = [] } = useNotes();

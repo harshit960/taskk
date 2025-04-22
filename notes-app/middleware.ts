@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   });
 
   // Log the current cookies for debugging
-  console.log('Middleware cookies:', Object.fromEntries(request.cookies));
+  // console.log('Middleware cookies:', Object.fromEntries(request.cookies));
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
       cookies: {
         get(name: string) {
           const cookie = request.cookies.get(name);
-          console.log(`Middleware getting cookie: ${name}:`, cookie?.value ? 'exists' : 'missing');
+          // console.log(`Middleware getting cookie: ${name}:`, cookie?.value ? 'exists' : 'missing');
           return cookie?.value;
         },
         set(name: string, value: string, options) {

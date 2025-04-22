@@ -1,18 +1,19 @@
 "use client";
-
+import * as React from 'react'
 import { Button } from "@/components/ui/button";
 import { NoteForm } from "@/components/notes/note-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { useNote, useUpdateNote, useDeleteNote } from "@/lib/services/notes-service";
+import { useNote, useUpdateNote, useDeleteNote } from "@/lib/services/api-notes-service";
 
 export default function NotePage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  
-  const { data: note, isLoading } = useNote(params.id);
+  const id = params.id;
+
+  const { data: note, isLoading } = useNote(id);
   const updateNoteMutation = useUpdateNote();
   const deleteNoteMutation = useDeleteNote();
   

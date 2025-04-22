@@ -18,7 +18,7 @@ export async function GET() {
     });
 
     // Transform the response to match our front-end data structure
-    const transformedNotes = notes.map((note) => ({
+    const transformedNotes = notes.map((note: { id: any; title: any; content: any; createdAt: any; updatedAt: any; tags: any[]; }) => ({
       id: note.id,
       title: note.title,
       content: note.content,
@@ -41,7 +41,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, content, tags = [] } = body;
+    const { title, content,user_id, tags = [] } = body;
 
     if (!title) {
       return NextResponse.json(
@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
         data: {
           title,
           content: content || '',
+          user_id, // Converting user_id to string to match schema type
         },
       });
 
@@ -108,7 +109,7 @@ export async function POST(request: NextRequest) {
       content: note.content,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
-      tags: note.tags.map((noteTag) => noteTag.tag.name),
+      tags: note.tags.map((noteTag: { tag: { name: any; }; }) => noteTag.tag.name),
     };
 
     return NextResponse.json(transformedNote, { status: 201 });

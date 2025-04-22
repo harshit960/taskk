@@ -1,16 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { Note } from "@/types/note";
 import { useState } from "react";
 
 interface NoteFormProps {
   initialValues?: Partial<Note>;
-  onSubmit: (data: { title: string; content: string; tags?: string[] }) => void;
+  onSubmit: (data: { title: string; content: string; user_id: string; tags?: string[] }) => void;
   onCancel?: () => void;
 }
 
 export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
+  const { user, isLoading, refreshSession } = useAuth();
   const [title, setTitle] = useState(initialValues?.title || "");
   const [content, setContent] = useState(initialValues?.content || "");
   const [tagInput, setTagInput] = useState("");
@@ -34,6 +36,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
     onSubmit({
       title: title.trim(),
       content: content.trim(),
+      user_id: user?.id || '',
       tags: tags.length > 0 ? tags : undefined,
     });
   };
