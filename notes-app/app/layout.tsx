@@ -33,7 +33,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1 container py-6">
+            <main className="flex-1 container py-6 px-8 mx-10">
               {children}
             </main>
           </div>

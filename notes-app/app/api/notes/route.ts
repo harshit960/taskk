@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create a new note with associated tags
-    const note = await prisma.$transaction(async (tx) => {
+    const note = await prisma.$transaction(async (tx:any) => {
       // Create the note
       const newNote = await tx.note.create({
         data: {
