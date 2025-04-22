@@ -1124,24 +1124,30 @@ export namespace Prisma {
 
   export type NoteMinAggregateOutputType = {
     id: string | null
+    user_id: string | null
     title: string | null
     content: string | null
+    summary: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type NoteMaxAggregateOutputType = {
     id: string | null
+    user_id: string | null
     title: string | null
     content: string | null
+    summary: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type NoteCountAggregateOutputType = {
     id: number
+    user_id: number
     title: number
     content: number
+    summary: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1150,24 +1156,30 @@ export namespace Prisma {
 
   export type NoteMinAggregateInputType = {
     id?: true
+    user_id?: true
     title?: true
     content?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type NoteMaxAggregateInputType = {
     id?: true
+    user_id?: true
     title?: true
     content?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type NoteCountAggregateInputType = {
     id?: true
+    user_id?: true
     title?: true
     content?: true
+    summary?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1247,8 +1259,10 @@ export namespace Prisma {
 
   export type NoteGroupByOutputType = {
     id: string
+    user_id: string
     title: string
     content: string
+    summary: string | null
     createdAt: Date
     updatedAt: Date
     _count: NoteCountAggregateOutputType | null
@@ -1272,8 +1286,10 @@ export namespace Prisma {
 
   export type NoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    user_id?: boolean
     title?: boolean
     content?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tags?: boolean | Note$tagsArgs<ExtArgs>
@@ -1282,29 +1298,35 @@ export namespace Prisma {
 
   export type NoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    user_id?: boolean
     title?: boolean
     content?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["note"]>
 
   export type NoteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    user_id?: boolean
     title?: boolean
     content?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["note"]>
 
   export type NoteSelectScalar = {
     id?: boolean
+    user_id?: boolean
     title?: boolean
     content?: boolean
+    summary?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type NoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["note"]>
+  export type NoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "title" | "content" | "summary" | "createdAt" | "updatedAt", ExtArgs["result"]["note"]>
   export type NoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tags?: boolean | Note$tagsArgs<ExtArgs>
     _count?: boolean | NoteCountOutputTypeDefaultArgs<ExtArgs>
@@ -1319,8 +1341,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      user_id: string
       title: string
       content: string
+      summary: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["note"]>
@@ -1748,8 +1772,10 @@ export namespace Prisma {
    */
   interface NoteFieldRefs {
     readonly id: FieldRef<"Note", 'String'>
+    readonly user_id: FieldRef<"Note", 'String'>
     readonly title: FieldRef<"Note", 'String'>
     readonly content: FieldRef<"Note", 'String'>
+    readonly summary: FieldRef<"Note", 'String'>
     readonly createdAt: FieldRef<"Note", 'DateTime'>
     readonly updatedAt: FieldRef<"Note", 'DateTime'>
   }
@@ -4269,8 +4295,10 @@ export namespace Prisma {
 
   export const NoteScalarFieldEnum: {
     id: 'id',
+    user_id: 'user_id',
     title: 'title',
     content: 'content',
+    summary: 'summary',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4309,6 +4337,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -4366,8 +4402,10 @@ export namespace Prisma {
     OR?: NoteWhereInput[]
     NOT?: NoteWhereInput | NoteWhereInput[]
     id?: StringFilter<"Note"> | string
+    user_id?: StringFilter<"Note"> | string
     title?: StringFilter<"Note"> | string
     content?: StringFilter<"Note"> | string
+    summary?: StringNullableFilter<"Note"> | string | null
     createdAt?: DateTimeFilter<"Note"> | Date | string
     updatedAt?: DateTimeFilter<"Note"> | Date | string
     tags?: NoteTagListRelationFilter
@@ -4375,8 +4413,10 @@ export namespace Prisma {
 
   export type NoteOrderByWithRelationInput = {
     id?: SortOrder
+    user_id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    summary?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tags?: NoteTagOrderByRelationAggregateInput
@@ -4387,8 +4427,10 @@ export namespace Prisma {
     AND?: NoteWhereInput | NoteWhereInput[]
     OR?: NoteWhereInput[]
     NOT?: NoteWhereInput | NoteWhereInput[]
+    user_id?: StringFilter<"Note"> | string
     title?: StringFilter<"Note"> | string
     content?: StringFilter<"Note"> | string
+    summary?: StringNullableFilter<"Note"> | string | null
     createdAt?: DateTimeFilter<"Note"> | Date | string
     updatedAt?: DateTimeFilter<"Note"> | Date | string
     tags?: NoteTagListRelationFilter
@@ -4396,8 +4438,10 @@ export namespace Prisma {
 
   export type NoteOrderByWithAggregationInput = {
     id?: SortOrder
+    user_id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    summary?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: NoteCountOrderByAggregateInput
@@ -4410,8 +4454,10 @@ export namespace Prisma {
     OR?: NoteScalarWhereWithAggregatesInput[]
     NOT?: NoteScalarWhereWithAggregatesInput | NoteScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Note"> | string
+    user_id?: StringWithAggregatesFilter<"Note"> | string
     title?: StringWithAggregatesFilter<"Note"> | string
     content?: StringWithAggregatesFilter<"Note"> | string
+    summary?: StringNullableWithAggregatesFilter<"Note"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Note"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Note"> | Date | string
   }
@@ -4507,8 +4553,10 @@ export namespace Prisma {
 
   export type NoteCreateInput = {
     id?: string
+    user_id: string
     title: string
     content: string
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tags?: NoteTagCreateNestedManyWithoutNoteInput
@@ -4516,8 +4564,10 @@ export namespace Prisma {
 
   export type NoteUncheckedCreateInput = {
     id?: string
+    user_id: string
     title: string
     content: string
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tags?: NoteTagUncheckedCreateNestedManyWithoutNoteInput
@@ -4525,8 +4575,10 @@ export namespace Prisma {
 
   export type NoteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: NoteTagUpdateManyWithoutNoteNestedInput
@@ -4534,8 +4586,10 @@ export namespace Prisma {
 
   export type NoteUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: NoteTagUncheckedUpdateManyWithoutNoteNestedInput
@@ -4543,24 +4597,30 @@ export namespace Prisma {
 
   export type NoteCreateManyInput = {
     id?: string
+    user_id: string
     title: string
     content: string
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type NoteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NoteUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4660,6 +4720,21 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -4677,30 +4752,41 @@ export namespace Prisma {
     none?: NoteTagWhereInput
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type NoteTagOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type NoteCountOrderByAggregateInput = {
     id?: SortOrder
+    user_id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type NoteMaxOrderByAggregateInput = {
     id?: SortOrder
+    user_id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type NoteMinOrderByAggregateInput = {
     id?: SortOrder
+    user_id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -4721,6 +4807,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -4801,6 +4905,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -4919,6 +5027,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -4956,6 +5078,34 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -5050,16 +5200,20 @@ export namespace Prisma {
 
   export type NoteCreateWithoutTagsInput = {
     id?: string
+    user_id: string
     title: string
     content: string
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type NoteUncheckedCreateWithoutTagsInput = {
     id?: string
+    user_id: string
     title: string
     content: string
+    summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5099,16 +5253,20 @@ export namespace Prisma {
 
   export type NoteUpdateWithoutTagsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NoteUncheckedUpdateWithoutTagsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

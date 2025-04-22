@@ -17,12 +17,15 @@ datasource db {
 // Note model for storing individual notes
 model Note {
   id        String    @id @default(uuid())
+  user_id   String // This links to Supabase auth user id
   title     String
   content   String
+  summary   String? // Optional summary field
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   tags      NoteTag[]
 
+  @@index([user_id])
   @@map("notes")
 }
 
