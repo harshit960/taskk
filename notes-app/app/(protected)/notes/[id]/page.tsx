@@ -8,12 +8,14 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useNote, useUpdateNote, useDeleteNote } from "@/lib/services/api-notes-service";
 
-export default function NotePage({ params }: { params: { id: string } }) {
+
+
+export default  function NotePage({ params }: { params: Promise<{ id: string }>}) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const id = params.id;
+  const id = React.use(params);
 
-  const { data: note, isLoading } = useNote(id);
+  const { data: note, isLoading } = useNote(id.id);
   const updateNoteMutation = useUpdateNote();
   const deleteNoteMutation = useDeleteNote();
   

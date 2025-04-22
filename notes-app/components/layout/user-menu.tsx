@@ -61,7 +61,7 @@ function getInitials(user: User): string {
   if (user.user_metadata?.full_name) {
     return fullName
       .split(" ")
-      .map((name) => name[0])
+      .map((name: string) => name[0])
       .join("")
       .toUpperCase()
       .substring(0, 2);

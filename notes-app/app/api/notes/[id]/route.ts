@@ -4,11 +4,11 @@ import prisma from '@/lib/db';
 // GET a single note by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const note = await prisma.note.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         tags: {
           include: {
@@ -48,7 +48,7 @@ export async function GET(
 // PUT (update) a note by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
@@ -63,7 +63,7 @@ export async function PUT(
 
     // Check if the note exists
     const existingNote = await prisma.note.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!existingNote) {
@@ -77,7 +77,7 @@ export async function PUT(
     const updatedNote = await prisma.$transaction(async (tx: { note: { update: (arg0: { where: { id: string; }; data: { title: any; content: any; }; }) => any; findUnique: (arg0: { where: { id: any; }; include: { tags: { include: { tag: boolean; }; }; }; }) => any; }; noteTag: { deleteMany: (arg0: { where: { noteId: string; }; }) => any; create: (arg0: { data: { noteId: any; tagId: any; }; }) => any; }; tag: { upsert: (arg0: { where: { name: any; }; update: {}; create: { name: any; }; }) => any; }; }) => {
       // Update the note
       const note = await tx.note.update({
-        where: { id: params.id },
+        where: { id: (await params).id },
         data: {
           title,
           content: content || '',
@@ -87,7 +87,7 @@ export async function PUT(
       // Remove all existing tag connections for this note
       await tx.noteTag.deleteMany({
         where: {
-          noteId: params.id,
+          noteId: (await params).id,
         },
       });
 
@@ -154,12 +154,12 @@ export async function PUT(
 // DELETE a note by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check if the note exists
     const existingNote = await prisma.note.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     if (!existingNote) {
@@ -171,7 +171,7 @@ export async function DELETE(
 
     // Delete the note (this will cascade delete its tag connections)
     await prisma.note.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     });
 
     return NextResponse.json({ success: true });
