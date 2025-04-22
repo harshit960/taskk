@@ -17,6 +17,7 @@ const eslintConfig = [
       '@next/next/no-page-custom-font': 'off',
         'react-hooks/rules-of-hooks': 'off',
         'react-hooks/exhaustive-deps': 'off',
+        'eslint#disabling-rules': 'off',
     },
   }),
 ];
