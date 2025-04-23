@@ -128,3 +128,28 @@ export const useDeleteNote = () => {
     },
   });
 }; 
+export const useSummarizeNote = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (content: string) => {
+      const response = await fetch(`/api/notes/summarize`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to summarize note');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.notes.lists() });
+      return data;
+    },
+  });
+};

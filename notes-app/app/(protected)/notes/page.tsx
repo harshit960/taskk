@@ -2,16 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { NotesList } from "@/components/notes/notes-list";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { NoteForm } from "@/components/notes/note-form";
 import { toast } from "sonner";
-import { useNotes, useAddNote, useDeleteNote } from "@/lib/services/api-notes-service";
+import { useNotes, useAddNote, useDeleteNote, useSummarizeNote } from "@/lib/services/api-notes-service";
+import { SearchFilter } from "@/components/notes/search-filter";
 
 export default function NotesPage() {
   const { data: notes = [] } = useNotes();
   const addNoteMutation = useAddNote();
   const deleteNoteMutation = useDeleteNote();
   const [isCreating, setIsCreating] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const handleCreateNote = (data: { title: string; content: string; tags?: string[] }) => {
     addNoteMutation.mutate(data, {
@@ -36,6 +39,25 @@ export default function NotesPage() {
     });
   };
 
+  // Extract all tags from all notes
+  const allTags = useMemo(() => {
+    return notes.flatMap(note => note.tags || []);
+  }, [notes]);
+
+  // Filter notes based on search query and active tag
+  const filteredNotes = useMemo(() => {
+    return notes.filter(note => {
+      const matchesSearch = searchQuery === "" || 
+        note.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        note.content.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesTag = !activeTag || 
+        (note.tags && note.tags.includes(activeTag));
+      
+      return matchesSearch && matchesTag;
+    });
+  }, [notes, searchQuery, activeTag]);
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -44,6 +66,15 @@ export default function NotesPage() {
           <Button onClick={() => setIsCreating(true)}>Create Note</Button>
         )}
       </div>
+
+      {!isCreating && (
+        <SearchFilter 
+          onSearch={setSearchQuery}
+          onFilterByTag={setActiveTag}
+          activeTag={activeTag}
+          availableTags={allTags}
+        />
+      )}
 
       {isCreating ? (
         <div className="border rounded-lg p-6 bg-card">
@@ -55,7 +86,7 @@ export default function NotesPage() {
         </div>
       ) : (
         <NotesList 
-          notes={notes} 
+          notes={filteredNotes} 
           onDelete={handleDeleteNote} 
           isLoading={addNoteMutation.isPending || deleteNoteMutation.isPending}
         />

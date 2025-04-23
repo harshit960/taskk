@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/contexts/auth-context";
+import { useSummarizeNote } from "@/lib/services/api-notes-service";
 import { Note } from "@/types/note";
 import { useState } from "react";
 
@@ -12,6 +13,8 @@ interface NoteFormProps {
 }
 
 export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
+  const summarizeNoteMutation = useSummarizeNote();
+
   const { user, isLoading, refreshSession } = useAuth();
   const [title, setTitle] = useState(initialValues?.title || "");
   const [content, setContent] = useState(initialValues?.content || "");
@@ -23,6 +26,16 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
       setTags([...tags, tagInput.trim()]);
       setTagInput("");
+    }
+  };
+  const handleSummarize = async () => {
+    if (!content.trim()) return;
+    
+    try {
+      const res = await summarizeNoteMutation.mutateAsync(content);
+      setContent(res.summary);
+    } catch (error) {
+      console.error('Failed to summarize note:', error);
     }
   };
 
@@ -64,7 +77,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Note title"
+          placeholder="Note title (Ai will generate a title if left blank)"
           disabled={isSubmitting}
         />
       </div>
@@ -83,6 +96,9 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
         />
       </div>
 
+          <Button type="button" onClick={handleSummarize} variant="secondary" disabled={isSubmitting}>
+            Summarize
+          </Button>
       <div className="space-y-2">
         <label htmlFor="tags" className="text-sm font-medium">
           Tags
@@ -93,10 +109,10 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Add a tag"
+            placeholder="Add a tag (Ai will generate tags if left blank)"
             disabled={isSubmitting}
           />
-          <Button type="button" onClick={handleAddTag} variant="secondary" disabled={isSubmitting}>
+          <Button type="button" onClick={handleAddTag} variant="outline" disabled={isSubmitting}>
             Add
           </Button>
         </div>
