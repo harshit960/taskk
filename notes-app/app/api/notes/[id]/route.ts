@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { getCurrentUser } from '@/lib/server-utils';
 
 // GET a single note by ID
 export async function GET(
@@ -7,6 +8,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Get the current user
+    const userInfo = await getCurrentUser(request);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to access notes' },
+        { status: 401 }
+      );
+    }
+    
     const note = await prisma.note.findUnique({
       where: { id: (await params).id },
       include: {
@@ -22,6 +33,14 @@ export async function GET(
       return NextResponse.json(
         { error: 'Note not found' },
         { status: 404 }
+      );
+    }
+    
+    // Check if the note belongs to the current user
+    if (note.user_id !== userInfo.user_id) {
+      return NextResponse.json(
+        { error: 'Forbidden: You do not have permission to access this note' },
+        { status: 403 }
       );
     }
 
@@ -51,6 +70,16 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Get the current user
+    const userInfo = await getCurrentUser(request);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to update notes' },
+        { status: 401 }
+      );
+    }
+    
     const body = await request.json();
     const { title, content, tags = [] } = body;
 
@@ -70,6 +99,14 @@ export async function PUT(
       return NextResponse.json(
         { error: 'Note not found' },
         { status: 404 }
+      );
+    }
+    
+    // Check if the note belongs to the current user
+    if (existingNote.user_id !== userInfo.user_id) {
+      return NextResponse.json(
+        { error: 'Forbidden: You do not have permission to update this note' },
+        { status: 403 }
       );
     }
 
@@ -157,6 +194,16 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Get the current user
+    const userInfo = await getCurrentUser(request);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to delete notes' },
+        { status: 401 }
+      );
+    }
+    
     // Check if the note exists
     const existingNote = await prisma.note.findUnique({
       where: { id: (await params).id },
@@ -166,6 +213,14 @@ export async function DELETE(
       return NextResponse.json(
         { error: 'Note not found' },
         { status: 404 }
+      );
+    }
+    
+    // Check if the note belongs to the current user
+    if (existingNote.user_id !== userInfo.user_id) {
+      return NextResponse.json(
+        { error: 'Forbidden: You do not have permission to delete this note' },
+        { status: 403 }
       );
     }
 

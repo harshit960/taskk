@@ -1,11 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { generateContent } from '@/lib/services/ai-service';
+import { getCurrentUser } from '@/lib/server-utils';
 
 // GET all notes
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Get the current user
+    const userInfo = await getCurrentUser(request);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to access notes' },
+        { status: 401 }
+      );
+    }
+    
+    // Only fetch notes belonging to the current user
     const notes = await prisma.note.findMany({
+      where: {
+        user_id: userInfo.user_id
+      },
       include: {
         tags: {
           include: {
@@ -41,8 +56,21 @@ export async function GET() {
 // POST a new note
 export async function POST(request: NextRequest) {
   try {
-   const body = await request.json();
-    var { title , content,user_id, tags = [] } = body;
+    // Get the current user
+    const userInfo = await getCurrentUser(request);
+    
+    if (!userInfo) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to create notes' },
+        { status: 401 }
+      );
+    }
+    
+    const body = await request.json();
+    var { title, content, tags = [] } = body;
+    
+    // Always use the user ID from the auth token, not from the request body
+    const user_id = userInfo.user_id;
     
     if (!title || title === "") {
       const aiGenTitle = await generateContent({ 
@@ -65,7 +93,7 @@ export async function POST(request: NextRequest) {
         data: {
           title,
           content: content || '',
-          user_id, // Converting user_id to string to match schema type
+          user_id, // Using the current user's ID from auth
         },
       });
 
