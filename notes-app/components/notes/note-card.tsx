@@ -2,6 +2,7 @@ import { Note } from "@/types/note";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { CalendarCheck2 } from "lucide-react";
 
 interface NoteCardProps {
   note: Note;
@@ -10,11 +11,11 @@ interface NoteCardProps {
 
 export function NoteCard({ note, onDelete }: NoteCardProps) {
   const { id, title, content, createdAt, updatedAt, tags } = note;
-  
-  const truncatedContent = content.length > 150 
-    ? content.substring(0, 150) + "..." 
+
+  const truncatedContent = content.length > 150
+    ? content.substring(0, 150) + "..."
     : content;
-  
+
   const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -32,8 +33,8 @@ export function NoteCard({ note, onDelete }: NoteCardProps) {
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {tags.map((tag) => (
-              <span 
-                key={tag} 
+              <span
+                key={tag}
                 className="text-xs bg-secondary px-2 py-1 rounded-full"
               >
                 {tag}
@@ -43,13 +44,20 @@ export function NoteCard({ note, onDelete }: NoteCardProps) {
         )}
       </CardContent>
       <CardFooter className="flex justify-between">
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href={`/notes/${id}`}>View</Link>
+          </Button>
         <Button variant="outline" asChild>
-          <Link href={`/notes/${id}`}>View</Link>
+          <Link href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${createdAt}/${updatedAt}&details=${content}`} target="_blank" rel="noopener noreferrer">
+            <CalendarCheck2 />
+          </Link>
         </Button>
+        </div>
         {onDelete && (
-          <Button 
-            variant="destructive" 
-            size="sm" 
+          <Button
+            variant="destructive"
+            size="sm"
             onClick={() => onDelete(id)}
           >
             Delete
