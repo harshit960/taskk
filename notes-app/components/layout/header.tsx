@@ -31,10 +31,10 @@ export function Header() {
           {!isLoading && !user ? (
             <>
               <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
-                <Link href="/login">Sign in</Link>
+                <Link href="/login">Login</Link>
               </Button>
               <Button size="sm" className="font-medium" asChild>
-                <Link href="/register">Sign up</Link>
+                <Link href="/register">Get started</Link>
               </Button>
             </>
           ) : !isLoading && user ? (

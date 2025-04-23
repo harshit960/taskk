@@ -32,10 +32,10 @@ export function SearchFilter({
 
     return (
         <div className="space-y-4">
-            <div className="flex w-full justify-between">
+            <div className="flex flex-wrap space-y-4 w-full justify-between">
 
                 <h1 className="text-3xl font-bold">{title}</h1>
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                     <div>
                         <Input
                             placeholder="Search notes..."
