@@ -60,19 +60,20 @@ export default function NotesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Your Notes</h1>
+      {/* <div className="flex items-center justify-between">
         {!isCreating && (
           <Button onClick={() => setIsCreating(true)}>Create Note</Button>
         )}
-      </div>
+      </div> */}
 
       {!isCreating && (
         <SearchFilter 
+          title="Your Notes"
           onSearch={setSearchQuery}
           onFilterByTag={setActiveTag}
           activeTag={activeTag}
           availableTags={allTags}
+          onCreateNote={() => setIsCreating(true)}
         />
       )}
 
