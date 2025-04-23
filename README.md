@@ -35,7 +35,7 @@ A modern, feature-rich note-taking application built with Next.js, Supabase, and
 ### 1. Clone the repository
 
 ```bash
-git clone https://your-repository-url.git
+git clone https://github.com/harshit960/taskk.git
 cd notes-app
 ```
 
