@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { generateContent } from '@/lib/services/ai-service';
 
 // GET all notes
 export async function GET() {
@@ -40,14 +41,21 @@ export async function GET() {
 // POST a new note
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { title, content,user_id, tags = [] } = body;
+   const body = await request.json();
+    var { title , content,user_id, tags = [] } = body;
+    
+    if (!title || title === "") {
+      const aiGenTitle = await generateContent({ 
+        prompt: "DON'T GENERATE ANYTHING ELSE, JUST GENERATE A TITLE FOR A NOTE WITH THE FOLLOWING CONTENT: " + content,
 
-    if (!title) {
-      return NextResponse.json(
-        { error: 'Title is required' },
-        { status: 400 }
-      );
+      });
+      title = aiGenTitle;
+    }
+    if (!tags || tags.length === 0) {
+      const aiGenTags = await generateContent({ 
+        prompt: "DON'T GENERATE ANYTHING ELSE, JUST GENERATE A TAGS FOR A NOTE WITH THE FOLLOWING CONTENT: Give me 3 tags for this note. Comma separated Values. " + content,
+      });
+      tags = aiGenTags.split(',');
     }
 
     // Create a new note with associated tags

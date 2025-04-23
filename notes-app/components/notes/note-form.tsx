@@ -17,6 +17,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
   const [content, setContent] = useState(initialValues?.content || "");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>(initialValues?.tags || []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
@@ -31,14 +32,19 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    // if (!title.trim()) return;
+    
+    setIsSubmitting(true);
     
     onSubmit({
-      title: title.trim(),
-      content: content.trim(),
+      title: title.trim() || "",
+      content: content.trim() || "",
       user_id: user?.id || '',
       tags: tags.length > 0 ? tags : undefined,
     });
+    
+    // Note: If the onSubmit is async, you'd typically want to reset isSubmitting
+    // in the parent component after the submission is complete
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -59,7 +65,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Note title"
-          required
+          disabled={isSubmitting}
         />
       </div>
 
@@ -73,6 +79,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write your note here..."
           className="min-h-[200px]"
+          disabled={isSubmitting}
         />
       </div>
 
@@ -87,8 +94,9 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Add a tag"
+            disabled={isSubmitting}
           />
-          <Button type="button" onClick={handleAddTag} variant="secondary">
+          <Button type="button" onClick={handleAddTag} variant="secondary" disabled={isSubmitting}>
             Add
           </Button>
         </div>
@@ -104,6 +112,7 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
                   type="button"
                   onClick={() => handleRemoveTag(tag)}
                   className="text-muted-foreground hover:text-foreground"
+                  disabled={isSubmitting}
                 >
                   ×
                 </button>
@@ -115,11 +124,13 @@ export function NoteForm({ initialValues, onSubmit, onCancel }: NoteFormProps) {
 
       <div className="flex justify-end gap-2">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
         )}
-        <Button type="submit">Save</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Saving..." : "Save"}
+        </Button>
       </div>
     </form>
   );
